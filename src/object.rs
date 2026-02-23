@@ -1,13 +1,15 @@
 pub struct Object {
     position:(f64, f64),
-    size:(f64,f64),
+    size:(f64, f64),
+    color:(u8, u8, u8)
 }
 
 impl Object {
-    pub fn new(x_pos: f64, y_pos:f64, size_x: f64, size_y: f64) -> Object {
+    pub fn new(x_pos: f64, y_pos:f64, size_x: f64, size_y: f64, red: u8, green: u8, blue: u8) -> Object {
         Object {
-            position : (x_pos, y_pos),
-            size : (size_x, size_y),
+            position: (x_pos, y_pos),
+            size: (size_x, size_y),
+            color: (red,green,blue)
         }
     }
 
@@ -22,6 +24,10 @@ impl Object {
 
     pub fn get_size(&self) -> (f64, f64) {
         self.size
+    }
+
+    pub fn get_color(&self) -> (u8, u8, u8) {
+        self.color
     }
 
     pub fn to_string(&self) -> String {

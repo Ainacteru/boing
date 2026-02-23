@@ -1,20 +1,42 @@
-use crate::object::Object;
+extern crate glutin_window;
+extern crate graphics;
+extern crate opengl_graphics;
+extern crate piston;
+
+use glutin_window::GlutinWindow as Window;
+use opengl_graphics::{OpenGL};
+use piston::{RenderEvent, UpdateEvent as _};
+use piston::event_loop::{EventSettings, Events};
+use piston::window::WindowSettings;
+
+
+use crate::gfx::app;
 
 pub mod object;
+mod gfx;
 
 fn main() {
-    let mut ball:Object = Object::new(0.0,0.0,1.0,1.0);
+    // Change this to OpenGL::V2_1 if not working.
+    let opengl = OpenGL::V3_2;
 
-    let mut pos: (f64, f64) = (0.0, 0.0);
+    // Create a Glutin window.
+    let mut window: Window = WindowSettings::new("balls", [1920, 1080])
+        .graphics_api(opengl)
+        .exit_on_esc(true)
+        .build()
+        .unwrap();
 
-    loop {
+    // Create a new game and run it.
+    let mut app = app::App::new(opengl);
 
-        ball.set_position(pos.0, pos.1);
+    let mut events = Events::new(EventSettings::new());
+    while let Some(e) = events.next(&mut window) {
+        if let Some(args) = e.render_args() {
+            app.render(&args);
+        }
 
-        println!("{}", ball.to_string());
-
-        pos.0 += 1.0;
-        pos.1 += 1.0;
+        if let Some(args) = e.update_args() {
+            app.update(&args);
+        }
     }
-
 }
