@@ -1,12 +1,13 @@
-use graphics::ellipse::circle;
+use graphics::{Context, ellipse::{centered, circle}};
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::input::{RenderArgs, UpdateArgs};
 
-use crate::object;
+use crate::object::{self, Object};
 
 pub struct App {
     pub(crate) gl: GlGraphics, // OpenGL drawing backend.
-    position: (f64, f64),  // Rotation for the square.
+    ball: Object,
+    ground: Object,
 }
 
 impl App {
@@ -14,39 +15,50 @@ impl App {
     pub fn new(opengl: OpenGL) -> Self {
         App {
             gl: GlGraphics::new(opengl),
-            position: (0.0, 0.0), // default value
+            ball: object::Object::new(10.0,10.0),
+            ground: object::Object::new(100.0,10.0),
+
         }
+    }
+
+    pub fn init(&mut self) {
+        self.ground.set_color((255,0,0));
+
     }
 
     pub fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
-        const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
 
-        let ball = object::Object::new(0.0,0.0,10.0,10.0,0,0,0);
+        let circle = circle(0.0, 0.0, self.ball.get_size().0);
+        let rect = centered([0.0, -10.0, self.ground.get_size().0/2.0, self.ground.get_size().1/2.0]);
 
-        let circle = circle(ball.get_position().0, ball.get_position().1, ball.get_size().0);
-
-        let (x, y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0);
+        let (x, y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0); // basically point (0,0)
 
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
-            clear(GREEN, gl);
+            clear([0.297777778, 0.368888889, 0.475555556, 1.0], gl); // some cool blue color
 
-            let transform = c
+            let ball_transform = c
                 .transform
-                .trans(x + self.position.0, y + self.position.1);
+                .trans(x, y)
+                .scale(1.0, -1.0)
+                .trans(self.ball.get_position().0, self.ball.get_position().1);
 
-            // Draw a box rotating around the middle of the screen.
-            circle_arc(RED, ball.get_size().0, 0.0, 2.0*3.14, circle, transform, gl);
 
+            circle_arc(self.ball.get_color(), self.ball.get_size().0, 0.0, 2.0*std::f64::consts::PI, circle, ball_transform, gl);
+            rectangle(self.ground.get_color(), rect, ball_transform, gl);
             
         });
     }
 
+
     pub fn update(&mut self, args: &UpdateArgs) {
-        self.position.0 += 20.0 * args.dt; // pos x
-        self.position.1 -= 20.0 * args.dt; // pos y
+        let x = self.ball.get_position().0 + 50.0 * args.dt;
+        let y = self.ball.get_position().1 + 50.0 * args.dt;
+
+
+        self.ball.set_position(x, y);
+        println!("ball: {}", self.ball.to_string())
     }
 }

@@ -5,11 +5,11 @@ pub struct Object {
 }
 
 impl Object {
-    pub fn new(x_pos: f64, y_pos:f64, size_x: f64, size_y: f64, red: u8, green: u8, blue: u8) -> Object {
+    pub fn new(size_x: f64, size_y: f64) -> Object {
         Object {
-            position: (x_pos, y_pos),
+            position: (0.0, 0.0),
             size: (size_x, size_y),
-            color: (red,green,blue)
+            color: (255,255,255)
         }
     }
 
@@ -26,8 +26,14 @@ impl Object {
         self.size
     }
 
-    pub fn get_color(&self) -> (u8, u8, u8) {
-        self.color
+    pub fn set_color(&mut self, new_color: (u8,u8,u8)) {
+        self.color.0 = new_color.0;
+        self.color.1 = new_color.1;
+        self.color.2 = new_color.2;
+    }
+
+    pub fn get_color(&self) -> [f32; 4] {
+        [(self.color.0/255).into(), (self.color.1/255).into(), (self.color.2/255).into(), 1.0 ]
     }
 
     pub fn to_string(&self) -> String {
