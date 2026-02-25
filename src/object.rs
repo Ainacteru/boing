@@ -26,10 +26,10 @@ impl Object {
         self.size
     }
 
-    pub fn set_color(&mut self, new_color: (u8,u8,u8)) {
-        self.color.0 = new_color.0;
-        self.color.1 = new_color.1;
-        self.color.2 = new_color.2;
+    pub fn set_color(&mut self, r: u8, g: u8, b: u8) {
+        self.color.0 = r;
+        self.color.1 = g;
+        self.color.2 = b;
     }
 
     pub fn get_color(&self) -> [f32; 4] {
