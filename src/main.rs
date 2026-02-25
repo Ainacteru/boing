@@ -20,7 +20,7 @@ fn main() {
     let opengl = OpenGL::V3_2;
 
     // Create a Glutin window.
-    let mut window: Window = WindowSettings::new("balls", [1000, 5000])
+    let mut window: Window = WindowSettings::new("balls", [500, 500])
         .graphics_api(opengl)
         .exit_on_esc(true)
         .build()
