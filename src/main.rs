@@ -10,10 +10,11 @@ use piston::event_loop::{EventSettings, Events};
 use piston::window::WindowSettings;
 
 
-use crate::gfx::app;
+use gfx::app;
 
 pub mod object;
 mod gfx;
+mod utils;
 
 fn main() {
     // Change this to OpenGL::V2_1 if not working.
