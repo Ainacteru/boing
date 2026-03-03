@@ -23,7 +23,8 @@ impl App {
 
     pub fn init(&mut self) {
         self.ground.set_color(255, 0, 0);
-
+            self.ball.set_position(0.0, 0.0);
+        self.ground.set_position(0.0, -200.0);
     }
 
     pub fn render(&mut self, args: &RenderArgs) {
@@ -55,6 +56,9 @@ impl App {
 
 
         self.ball.set_position(x, y);
-        println!("ball: {}", self.ball.to_string())
+
+        println!("ball pos: {}, {}", self.ball.get_position().0, self.ball.get_position().1);
+        println!("ground pos: {}, {}", self.ground.get_position().0, self.ground.get_position().1);
+        println!("ball to ground: {}",  self.ball.get_position().0 * self.ground.get_position().0 + self.ball.get_position().1 * self.ground.get_position().1);
     }
 }

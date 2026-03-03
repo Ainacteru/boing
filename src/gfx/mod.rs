@@ -1,2 +1,2 @@
-pub(crate) mod app;
+pub mod app;
 pub(crate) mod gfxutil;
